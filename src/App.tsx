@@ -13,7 +13,7 @@ const App = () => {
     const timer = setTimeout(() => {
       setIsInitialAnimation(false);
     }, 2000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -95,20 +95,18 @@ const App = () => {
       </div>
 
       <div
-      className={`relative w-96 h-64 bg-pink-100 rounded-lg shadow-2xl flex items-center justify-center p-8 transform transition-all duration-500 cursor-pointer ${
-        isInitialAnimation ? 'animate-card-entry' : 'animate-float hover:rotate-0 rotate-2'
-      }`}
-      style={{
-        border: '2px solid rgba(255, 182, 193, 0.5)',
-      }}
-      onMouseEnter={() => !isOpen && setIsOpen(true)}
-      onMouseLeave={() => !showModal && setIsOpen(false)}
-      onClick={handleCardClick}
-    >
-        <div
-          className={`absolute -right-24 top-1/2 transform -translate-y-1/2 bg-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 ${
-            isOpen && !showModal ? 'opacity-100' : 'opacity-0'
+        className={`relative w-96 h-64 bg-pink-100 rounded-lg shadow-2xl flex items-center justify-center p-8 transform transition-all duration-500 cursor-pointer ${isInitialAnimation ? 'animate-card-entry' : 'animate-float hover:rotate-0 rotate-2'
           }`}
+        style={{
+          border: '2px solid rgba(255, 182, 193, 0.5)',
+        }}
+        onMouseEnter={() => !isOpen && setIsOpen(true)}
+        onMouseLeave={() => !showModal && setIsOpen(false)}
+        onClick={handleCardClick}
+      >
+        <div
+          className={`absolute -right-24 top-1/2 transform -translate-y-1/2 bg-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 ${isOpen && !showModal ? 'opacity-100' : 'opacity-0'
+            }`}
         >
           <p className="text-pink-500 font-semibold">¡Ábreme!</p>
           <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 rotate-45 w-4 h-4 bg-white"></div>
@@ -148,7 +146,7 @@ const App = () => {
           onClick={() => setShowModal(false)}
         >
           <div
-            className="relative max-w-lg w-full mx-auto transform transition-all cursor-default animate-sway"
+            className="relative max-w-3xl w-full mx-auto transform transition-all cursor-default animate-sway"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -159,74 +157,89 @@ const App = () => {
             </button>
 
             <div
-              className="w-full bg-[#f4e4bc] overflow-hidden transform transition-all"
+              className="w-full bg-white overflow-hidden transform transition-all rounded-2xl"
               style={{
-                clipPath: generateScrollPath(),
-                backgroundImage: `
-                  radial-gradient(circle at top left, #d4b483 0%, transparent 20%),
-                  radial-gradient(circle at top right, #d4b483 0%, transparent 20%),
-                  radial-gradient(circle at bottom left, #d4b483 0%, transparent 20%),
-                  radial-gradient(circle at bottom right, #d4b483 0%, transparent 20%),
-                  url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")
-                `,
-                boxShadow: `
-                  0 0 0 2px #f4e4bc,
-                  0 10px 25px rgba(0,0,0,0.3),
-                  inset 0 0 60px rgba(139,69,19,0.3)
-                `
+                boxShadow: '0 10px 25px rgba(0,0,0,0.2), 0 0 0 2px #FFB6C1'
               }}
             >
-              <div className="relative p-8 md:p-12 max-h-[80vh] overflow-y-auto">
-                <div
-                  className="absolute top-0 left-0 w-full h-24"
-                  style={{
-                    background: 'linear-gradient(to bottom, rgba(139,69,19,0.2), transparent)',
-                    pointerEvents: 'none'
-                  }}
-                ></div>
+              {/* Rosa mejorada con múltiples pétalos */}
+              <div className="absolute top-6 right-6">
+                <div className="relative w-24 h-24">
+                  {/* Tallo */}
+                  <div className="absolute w-1.5 h-24 bg-green-600 left-1/2 top-16 -translate-x-1/2 rotate-12"></div>
 
+                  {/* Hojas */}
+                  <div className="absolute w-8 h-5 bg-green-500 rounded-full -rotate-45 left-1/2 top-20 transform -translate-x-full"></div>
+                  <div className="absolute w-8 h-5 bg-green-500 rounded-full rotate-45 left-1/2 top-24 transform"></div>
+
+                  {/* Pétalos internos */}
+                  <div className="absolute inset-0 animate-spin-slow">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={`inner-${i}`}
+                        className="absolute w-8 h-8 bg-pink-400 rounded-full origin-center"
+                        style={{
+                          transform: `rotate(${i * 60}deg) translateY(-6px)`,
+                          filter: 'brightness(0.95)',
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+
+                  {/* Pétalos medios */}
+                  <div className="absolute inset-0 animate-spin-slow" style={{ animationDelay: '-2s' }}>
+                    {[...Array(8)].map((_, i) => (
+                      <div
+                        key={`middle-${i}`}
+                        className="absolute w-10 h-10 bg-pink-300 rounded-full origin-center"
+                        style={{
+                          transform: `rotate(${i * 45}deg) translateY(-8px)`,
+                          filter: 'brightness(0.9)',
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+
+                  {/* Pétalos externos */}
+                  <div className="absolute inset-0 animate-spin-slow" style={{ animationDelay: '-4s' }}>
+                    {[...Array(10)].map((_, i) => (
+                      <div
+                        key={`outer-${i}`}
+                        className="absolute w-12 h-12 bg-pink-200 rounded-full origin-center"
+                        style={{
+                          transform: `rotate(${i * 36}deg) translateY(-10px)`,
+                          filter: 'brightness(0.85)',
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+
+                  {/* Centro de la rosa */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-6 h-6 bg-pink-600 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative p-12 md:p-16 max-h-[80vh] overflow-y-auto">
                 <p
-                  className="text-[#4a2810] font-serif text-lg md:text-xl leading-relaxed text-center relative z-10 whitespace-pre-wrap"
+                  className="text-gray-800 font-serif text-xl md:text-2xl leading-relaxed text-center relative z-10 whitespace-pre-wrap"
                   style={{
-                    textShadow: '1px 1px 2px rgba(139,69,19,0.1)',
                     fontFamily: "'Noto Serif', serif"
                   }}
                 >
                   Espero que estés mejorando y sanando poco a poco. Sé que el proceso no siempre es fácil, pero quiero recordarte lo increíble que eres y lo mucho que vales. Hay personas en este mundo que te aprecian más de lo que imaginas (y sí, me incluyo entre ellas).
 
-Hice esto en mis tiempos libres con la esperanza de sacarte una sonrisa. Si lo logré, entonces valió la pena. Y si no, bueno… al menos lo intenté.
+                  Hice esto en mis tiempos libres para poder sacarate una sonrisa. Ya que estoy muy seguro de que te ves hermosa cuando sonríes.
 
-Sigue brillando a tu manera, que el mundo es un lugar mejor con alguien como tú en él.
+                  Sigue brillando a tu manera, que el mundo es un lugar mejor con alguien como tú en él.
                 </p>
-
-                <div
-                  className="absolute bottom-0 left-0 w-full h-24"
-                  style={{
-                    background: 'linear-gradient(to top, rgba(139,69,19,0.2), transparent)',
-                    pointerEvents: 'none'
-                  }}
-                ></div>
-
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `
-                      repeating-linear-gradient(
-                        to right,
-                        transparent,
-                        transparent 50px,
-                        rgba(139,69,19,0.03) 50px,
-                        rgba(139,69,19,0.03) 51px
-                      )
-                    `,
-                    pointerEvents: 'none'
-                  }}
-                ></div>
               </div>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 };
