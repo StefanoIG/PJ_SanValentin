@@ -204,11 +204,11 @@ const App = () => {
                     fontFamily: "'Noto Serif', serif"
                   }}
                 >
-                  Espero que estés mejorando y sanando poco a poco. Sé que el proceso no siempre es fácil, pero quiero recordarte lo increíble que eres y lo mucho que vales. Hay personas en este mundo que te aprecian más de lo que imaginas (y sí, me incluyo entre ellas).
+                  Espero que esté mejorando y sanando poco a poco. Sé que el proceso no siempre es fácil, pero quiero recordarle lo increíble que es y lo mucho que vale. Hay personas en este mundo que la aprecian más de lo que imagina (y sí, me incluyo entre ellas).
 
-                  Hice esto en mis tiempos libres para poder sacarate una sonrisa. Ya que estoy muy seguro de que te ves hermosa cuando sonríes.
+                  Hice esto en mis tiempos libres para poder sacarle una sonrisa. Estoy muy seguro de que se ve hermosa cuando sonríe.
 
-                  Sigue brillando a tu manera, que el mundo es un lugar mejor con alguien como tú en él.
+                  Siga brillando a su manera, que el mundo es un lugar mejor con alguien como usted en él 🌹
                 </p>
               </div>
             </div>
