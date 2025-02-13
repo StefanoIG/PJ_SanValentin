@@ -1,12 +1,27 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isInitialAnimation, setIsInitialAnimation] = useState(false);
 
   useEffect(() => {
     setIsOpen(false);
     setShowModal(false);
+
+    // Manejo de la animación inicial
+    const hasAnimated = sessionStorage.getItem('hasAnimated');
+    if (!hasAnimated) {
+      setIsInitialAnimation(true);
+      sessionStorage.setItem('hasAnimated', 'true');
+      
+      // Remover la clase de animación después de que termine
+      const timer = setTimeout(() => {
+        setIsInitialAnimation(false);
+      }, 2000); // 2 segundos de duración de la animación
+      
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const handleCardClick = () => {
@@ -17,25 +32,21 @@ const App = () => {
   // Función para generar puntos de clip-path aleatorios pero suaves
   const generateScrollPath = () => {
     const points = [];
-    // Parte superior enrollada
     points.push('0% 10%');
     for (let i = 0; i <= 10; i++) {
       const x = i * 10;
       const y = 10 + Math.sin(i) * 2;
       points.push(`${x}% ${y}%`);
     }
-    // Lado derecho irregular
     for (let i = 10; i <= 90; i += 10) {
       const x = 100 + Math.sin(i * 0.1) * 2;
       points.push(`${x}% ${i}%`);
     }
-    // Parte inferior enrollada
     for (let i = 10; i >= 0; i--) {
       const x = i * 10;
       const y = 90 + Math.sin(i) * 2;
       points.push(`${x}% ${y}%`);
     }
-    // Lado izquierdo irregular
     for (let i = 90; i >= 10; i -= 10) {
       const x = Math.sin(i * 0.1) * 2;
       points.push(`${x}% ${i}%`);
@@ -43,7 +54,6 @@ const App = () => {
     return `polygon(${points.join(', ')})`;
   };
 
-  //Funcion si pulsa esc cerrar modal
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -53,7 +63,6 @@ const App = () => {
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
-
 
   return (
     <div
@@ -66,9 +75,7 @@ const App = () => {
         backgroundPosition: 'center',
       }}
     >
-      {/* Decoraciones: Flores y corazones */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Flores */}
         {[...Array(10)].map((_, i) => (
           <div
             key={`flower-${i}`}
@@ -81,7 +88,6 @@ const App = () => {
           ></div>
         ))}
 
-        {/* Corazones */}
         {[...Array(10)].map((_, i) => (
           <div
             key={`heart-${i}`}
@@ -95,27 +101,27 @@ const App = () => {
         ))}
       </div>
 
-      {/* Carta en el centro */}
       <div
-        className="relative w-96 h-64 bg-pink-100 rounded-lg shadow-2xl flex items-center justify-center p-8 transform rotate-2 hover:rotate-0 transition-transform duration-500 animate-float group cursor-pointer"
+        className={`relative w-96 h-64 bg-pink-100 rounded-lg shadow-2xl flex items-center justify-center p-8 transform rotate-2 hover:rotate-0 transition-transform duration-500 animate-float group cursor-pointer ${
+          isInitialAnimation ? 'animate-card-entry' : ''
+        }`}
         style={{
-          animation: 'float 4s ease-in-out infinite',
+          animation: isInitialAnimation ? 'none' : 'float 4s ease-in-out infinite',
           border: '2px solid rgba(255, 182, 193, 0.5)',
         }}
         onMouseEnter={() => !isOpen && setIsOpen(true)}
         onMouseLeave={() => !showModal && setIsOpen(false)}
         onClick={handleCardClick}
       >
-        {/* Mensaje "¡Ábreme!" al lado derecho */}
         <div
-          className={`absolute -right-24 top-1/2 transform -translate-y-1/2 bg-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 ${isOpen && !showModal ? 'opacity-100' : 'opacity-0'
-            }`}
+          className={`absolute -right-24 top-1/2 transform -translate-y-1/2 bg-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 ${
+            isOpen && !showModal ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           <p className="text-pink-500 font-semibold">¡Ábreme!</p>
           <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 rotate-45 w-4 h-4 bg-white"></div>
         </div>
 
-        {/* Solapa superior de la carta */}
         <div
           className="absolute top-0 left-0 w-full h-24 transition-transform duration-500"
           style={{
@@ -141,7 +147,6 @@ const App = () => {
           ></div>
         </div>
 
-        {/* Borde decorativo de la carta */}
         <div className="absolute inset-2 border-2 border-pink-200 rounded-lg opacity-50"></div>
       </div>
 
@@ -154,7 +159,6 @@ const App = () => {
             className="relative max-w-lg w-full mx-auto transform transition-all cursor-default animate-sway"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Botón de cerrar */}
             <button
               onClick={() => setShowModal(false)}
               className="absolute -top-4 -right-4 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors z-10 shadow-lg"
@@ -162,7 +166,6 @@ const App = () => {
               ×
             </button>
 
-            {/* Contenedor del pergamino */}
             <div
               className="w-full bg-[#f4e4bc] overflow-hidden transform transition-all"
               style={{
@@ -181,9 +184,7 @@ const App = () => {
                 `
               }}
             >
-              {/* Contenido del pergamino */}
-              <div className="relative p-8 md:p-12">
-                {/* Efecto de sombra superior */}
+              <div className="relative p-8 md:p-12 max-h-[80vh] overflow-y-auto">
                 <div
                   className="absolute top-0 left-0 w-full h-24"
                   style={{
@@ -192,9 +193,8 @@ const App = () => {
                   }}
                 ></div>
 
-                {/* Texto del mensaje con textura */}
                 <p
-                  className="text-[#4a2810] font-serif text-lg md:text-xl leading-relaxed text-center relative z-10"
+                  className="text-[#4a2810] font-serif text-lg md:text-xl leading-relaxed text-center relative z-10 whitespace-pre-wrap"
                   style={{
                     textShadow: '1px 1px 2px rgba(139,69,19,0.1)',
                     fontFamily: "'Noto Serif', serif"
@@ -207,7 +207,6 @@ Hice esto en mis tiempos libres con la esperanza de sacarte una sonrisa. Si lo l
 Sigue brillando a tu manera, que el mundo es un lugar mejor con alguien como tú en él.
                 </p>
 
-                {/* Efecto de sombra inferior */}
                 <div
                   className="absolute bottom-0 left-0 w-full h-24"
                   style={{
@@ -216,7 +215,6 @@ Sigue brillando a tu manera, que el mundo es un lugar mejor con alguien como tú
                   }}
                 ></div>
 
-                {/* Efecto de pliegues */}
                 <div
                   className="absolute inset-0"
                   style={{
