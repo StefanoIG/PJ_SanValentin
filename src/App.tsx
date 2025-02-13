@@ -3,25 +3,18 @@ import { useState, useEffect } from 'react';
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isInitialAnimation, setIsInitialAnimation] = useState(false);
+  const [isInitialAnimation, setIsInitialAnimation] = useState(true);
 
   useEffect(() => {
     setIsOpen(false);
     setShowModal(false);
 
-    // Manejo de la animación inicial
-    const hasAnimated = sessionStorage.getItem('hasAnimated');
-    if (!hasAnimated) {
-      setIsInitialAnimation(true);
-      sessionStorage.setItem('hasAnimated', 'true');
-      
-      // Remover la clase de animación después de que termine
-      const timer = setTimeout(() => {
-        setIsInitialAnimation(false);
-      }, 2000); // 2 segundos de duración de la animación
-      
-      return () => clearTimeout(timer);
-    }
+    // Limpiar y establecer el estado de animación
+    const timer = setTimeout(() => {
+      setIsInitialAnimation(false);
+    }, 2000);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const handleCardClick = () => {
@@ -102,17 +95,16 @@ const App = () => {
       </div>
 
       <div
-        className={`relative w-96 h-64 bg-pink-100 rounded-lg shadow-2xl flex items-center justify-center p-8 transform rotate-2 hover:rotate-0 transition-transform duration-500 animate-float group cursor-pointer ${
-          isInitialAnimation ? 'animate-card-entry' : ''
-        }`}
-        style={{
-          animation: isInitialAnimation ? 'none' : 'float 4s ease-in-out infinite',
-          border: '2px solid rgba(255, 182, 193, 0.5)',
-        }}
-        onMouseEnter={() => !isOpen && setIsOpen(true)}
-        onMouseLeave={() => !showModal && setIsOpen(false)}
-        onClick={handleCardClick}
-      >
+      className={`relative w-96 h-64 bg-pink-100 rounded-lg shadow-2xl flex items-center justify-center p-8 transform transition-all duration-500 cursor-pointer ${
+        isInitialAnimation ? 'animate-card-entry' : 'animate-float hover:rotate-0 rotate-2'
+      }`}
+      style={{
+        border: '2px solid rgba(255, 182, 193, 0.5)',
+      }}
+      onMouseEnter={() => !isOpen && setIsOpen(true)}
+      onMouseLeave={() => !showModal && setIsOpen(false)}
+      onClick={handleCardClick}
+    >
         <div
           className={`absolute -right-24 top-1/2 transform -translate-y-1/2 bg-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 ${
             isOpen && !showModal ? 'opacity-100' : 'opacity-0'
