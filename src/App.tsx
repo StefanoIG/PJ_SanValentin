@@ -22,30 +22,6 @@ const App = () => {
     setShowModal(true);
   };
 
-  // Función para generar puntos de clip-path aleatorios pero suaves
-  const generateScrollPath = () => {
-    const points = [];
-    points.push('0% 10%');
-    for (let i = 0; i <= 10; i++) {
-      const x = i * 10;
-      const y = 10 + Math.sin(i) * 2;
-      points.push(`${x}% ${y}%`);
-    }
-    for (let i = 10; i <= 90; i += 10) {
-      const x = 100 + Math.sin(i * 0.1) * 2;
-      points.push(`${x}% ${i}%`);
-    }
-    for (let i = 10; i >= 0; i--) {
-      const x = i * 10;
-      const y = 90 + Math.sin(i) * 2;
-      points.push(`${x}% ${y}%`);
-    }
-    for (let i = 90; i >= 10; i -= 10) {
-      const x = Math.sin(i * 0.1) * 2;
-      points.push(`${x}% ${i}%`);
-    }
-    return `polygon(${points.join(', ')})`;
-  };
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
